@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.List;
 
 import hudson.plugins.tfs.commands.GetFilesToWorkFolderCommand;
+import hudson.plugins.tfs.commands.CleanWorkFolderCommand;
 import hudson.plugins.tfs.util.MaskedArgumentListBuilder;
 
 import org.junit.Test;

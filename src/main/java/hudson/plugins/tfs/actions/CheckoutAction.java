@@ -20,12 +20,14 @@ public class CheckoutAction {
     private final String projectPath;
     private final String localFolder;
     private final boolean useUpdate;
+    private final boolean useClean;
 
-    public CheckoutAction(String workspaceName, String projectPath, String localFolder, boolean useUpdate) {
+    public CheckoutAction(String workspaceName, String projectPath, String localFolder, boolean useUpdate, boolean useClean) {
         this.workspaceName = workspaceName;
         this.projectPath = projectPath;
         this.localFolder = localFolder;
         this.useUpdate = useUpdate;
+        this.useClean = useClean;
     }
 
     public List<ChangeSet> checkout(Server server, FilePath workspacePath, Calendar lastBuildTimestamp, Calendar currentBuildTimestamp) throws IOException, InterruptedException, ParseException {

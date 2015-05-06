@@ -3,6 +3,7 @@ package hudson.plugins.tfs.model;
 import hudson.model.User;
 import hudson.plugins.tfs.commands.AbstractChangesetVersionCommand;
 import hudson.plugins.tfs.commands.GetFilesToWorkFolderCommand;
+import hudson.plugins.tfs.commands.CleanWorkFolderCommand;
 import hudson.plugins.tfs.commands.RemoteChangesetVersionCommand;
 import hudson.plugins.tfs.commands.WorkspaceChangesetVersionCommand;
 import hudson.plugins.tfs.model.ChangeSet.Item;
@@ -164,6 +165,8 @@ public class Project {
      * @param localPath the local path to get all files into
      */
     public void getFiles(String localPath) throws IOException, InterruptedException {
+        CleanWorkFolderCommand cleancommand = new CleanWorkFolderCommand(server, localPath);
+        server.execute(cleancommand.getArguments()).close();
         GetFilesToWorkFolderCommand command = new GetFilesToWorkFolderCommand(server, localPath);
         server.execute(command.getArguments()).close();
     }
@@ -174,6 +177,8 @@ public class Project {
      * @param versionSpec the version spec to use when getting the files
      */
     public void getFiles(String localPath, String versionSpec) throws IOException, InterruptedException {
+        CleanWorkFolderCommand cleancommand = new CleanWorkFolderCommand(server, localPath);
+        server.execute(cleancommand.getArguments()).close();
         GetFilesToWorkFolderCommand command = new GetFilesToWorkFolderCommand(server, localPath, versionSpec);
         server.execute(command.getArguments()).close();
     }

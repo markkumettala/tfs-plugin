@@ -43,6 +43,7 @@ public class GetFilesToWorkFolderCommand extends AbstractCommand implements Pars
         arguments.add("get");
         arguments.add(workFolder);
         arguments.add("-recursive");
+        arguments.add("-overwrite");
         if (preview) {
             arguments.add("-preview");
         }

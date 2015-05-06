@@ -82,6 +82,7 @@ public class TeamFoundationServerScm extends SCM {
     private /* almost final */ Secret password;
     private final String userName;
     private final boolean useUpdate;
+    private final boolean useClean;
     
     private TeamFoundationServerRepositoryBrowser repositoryBrowser;
 
@@ -91,15 +92,16 @@ public class TeamFoundationServerScm extends SCM {
     private static final Logger logger = Logger.getLogger(TeamFoundationServerScm.class.getName());
 
     @Deprecated
-    public TeamFoundationServerScm(String serverUrl, String projectPath, String localPath, boolean useUpdate, String workspaceName, String userName, String password) {
-        this(serverUrl, projectPath, localPath, useUpdate, workspaceName, userName, Secret.fromString(password));
+    public TeamFoundationServerScm(String serverUrl, String projectPath, String localPath, boolean useUpdate, boolean useClean, String workspaceName, String userName, String password) {
+        this(serverUrl, projectPath, localPath, useUpdate, useClean, workspaceName, userName, Secret.fromString(password));
     }
 
     @DataBoundConstructor
-    public TeamFoundationServerScm(String serverUrl, String projectPath, String localPath, boolean useUpdate, String workspaceName, String userName, Secret password) {
+    public TeamFoundationServerScm(String serverUrl, String projectPath, String localPath, boolean useUpdate, boolean useClean, String workspaceName, String userName, Secret password) {
         this.serverUrl = serverUrl;
         this.projectPath = projectPath;
         this.useUpdate = useUpdate;
+        this.useClean = useClean;
         this.localPath = (Util.fixEmptyAndTrim(localPath) == null ? "." : localPath);
         this.workspaceName = (Util.fixEmptyAndTrim(workspaceName) == null ? "Hudson-${JOB_NAME}-${NODE_NAME}" : workspaceName);
         this.userName = userName;
@@ -136,6 +138,9 @@ public class TeamFoundationServerScm extends SCM {
         return useUpdate;
     }
 
+    public boolean isUseClean() {
+        return useClean;
+    }
     public String getUserPassword() {
         return Secret.toString(password);
     }
@@ -204,7 +209,7 @@ public class TeamFoundationServerScm extends SCM {
             final Project project = server.getProject(projectPath);
             recordWorkspaceChangesetVersion(build, listener, project, projectPath, singleVersionSpec);
 
-            CheckoutAction action = new CheckoutAction(workspaceConfiguration.getWorkspaceName(), workspaceConfiguration.getProjectPath(), workspaceConfiguration.getWorkfolder(), isUseUpdate());
+            CheckoutAction action = new CheckoutAction(workspaceConfiguration.getWorkspaceName(), workspaceConfiguration.getProjectPath(), workspaceConfiguration.getWorkfolder(), isUseUpdate(), isUseClean());
             try {
                 List<ChangeSet> list;
                 if (StringUtils.isNotEmpty(singleVersionSpec)) {
